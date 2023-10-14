@@ -28,7 +28,7 @@ static void print_str(const char *str, int *count)
  * process_format - Process format specifiers and update the count.
  *
  * @format: Format specifier.
- * @args_list: Argument list.
+ * @args_lists: Argument list.
  *
  * Return: the count of characters printed for the given format specifier.
  */
@@ -57,7 +57,7 @@ static int process_format(const char *format, va_list args_lists)
 }
 
 /**
- * my_printf - Custom printf function that processes format specifiers.
+ *_printf - Custom printf function that processes format specifiers.
  *
  * @format: Format string.
  *
