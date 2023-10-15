@@ -1,77 +1,47 @@
 #include "main.h"
 /**
- *write_char - Function to write a character to standard output
- *@c: character
- *@count: integer
- */
-void write_char(char c, int *count)
-{
-	write(1, &c, 1);
-	(*count)++;
-}
-
-/**
- *write_string - function to write string
- *@str: string
- *@count: integer
- */
-void write_string(const char *str, int *count)
-{
-	write(1, str, strlen(str));
-	(*count) += strlen(str);
-}
-
-/**
- *_printf - Custom printf function
- * @format: Format string
+ * _printf - produces output according to a format
+ * @format: The specified format
  *
- * Description:
- * A custom printf function that handles format specifiers
- * %c for characters and %s for strings. It writes the formatted output
- * to the standard output.
- *
- * Return:
- * The number of characters printed, or -1 if format is NULL.
+ * Return: The number of characters that were printed
  */
 int _printf(const char *format, ...)
 {
-	int count = 0;
+	unsigned int i, temp = 0;
+
 	va_list args_lists;
 
-	if (format == NULL)
+	if (!format || (format[0] == '%' && format[1] == '\0'))
+
 		return (-1);
 
 	va_start(args_lists, format);
-
-	while (*format)
+	for (i = 0; format[i] != '\0'; i++)
 	{
-		if (*format != '%')
+		if (format[i] != '%')
 		{
-			write_char(*format, &count);
+			write(1, &format[i], 1);
 		} else
 		{
-			format++;
-
-			if (*format == '\0')
-				break;
-
-			if (*format == '%')
+			i++;
+			if (format[i] == 'c')
 			{
-				write_char('%', &count);
-			} else if (*format == 'c')
-			{
-				char c = va_arg(args_lists, int);
+				char c = (char)va_arg(args_lists, int);
 
-				write_char(c, &count);
-			} else if (*format == 's')
+				write(1, &c, 1);
+			} else if (format[i] == 's')
 			{
 				char *str = va_arg(args_lists, char *);
 
-				write_string(str, &count);
+				write(1, str, strlen(str));
+			} else if (format[i] == '%')
+			{
+				write(1, &format[i], 1);
 			}
 		}
-		format++;
+		temp++;
+
 	}
 	va_end(args_lists);
-	return (count);
+	return (temp);
 }
