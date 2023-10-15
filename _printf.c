@@ -1,67 +1,37 @@
 #include "main.h"
 /**
- * print_char - Print a character and increment the count.
- *
- * @c: Character to print.
- * @count: Pointer to the count of characters printed.
+ *write_char - Function to write a character to standard output
+ *@c: character
+ *@count: integer
  */
-static void print_char(char c, int *count)
+void write_char(char c, int *count)
 {
 	write(1, &c, 1);
 	(*count)++;
 }
 
 /**
- * print_str - Print a string and update the count.
- *
- * @str: String to print.
- * @count: Pointer to the count of characters printed.
+ *write_string - function to write string
+ *@str: string
+ *@count: integer
  */
-static void print_str(const char *str, int *count)
+void write_string(const char *str, int *count)
 {
 	write(1, str, strlen(str));
 	(*count) += strlen(str);
 }
 
-
 /**
- * process_format - Process format specifiers and update the count.
+ *_printf - Custom printf function
+ * @format: Format string
  *
- * @format: Format specifier.
- * @args_lists: Argument list.
+ * Description:
+ * A custom printf function that handles format specifiers
+ * %c for characters and %s for strings. It writes the formatted output
+ * to the standard output.
  *
- * Return: the count of characters printed for the given format specifier.
- */
-static int process_format(const char *format, va_list args_lists)
-{
-	int count = 0;
-	char c;
-
-	switch (*format)
-	{
-		case 'c':
-			c = va_arg(args_lists, int);
-			print_char(c, &count);
-			break;
-		case 's':
-			{
-			const char *str = va_arg(args_lists, const char *);
-
-			print_str(str, &count);
-			break;
-			}
-		default:
-			print_char(*format, &count);
-	}
-	return (count);
-}
-
-/**
- *_printf - Custom printf function that processes format specifiers.
- *
- * @format: Format string.
- *
- * Return: the number of characters printed or -1 on error.
+ * Return:
+ * The number of characters printed, or -1 if format is NULL.
  */
 int _printf(const char *format, ...)
 {
@@ -70,26 +40,34 @@ int _printf(const char *format, ...)
 
 	if (format == NULL)
 		return (-1);
+
 	va_start(args_lists, format);
 
 	while (*format)
 	{
 		if (*format != '%')
 		{
-			print_char(*format, &count);
+			write_char(*format, &count);
 		} else
 		{
 			format++;
 
 			if (*format == '\0')
-			{
 				break;
-			} else if (*format == '%')
+
+			if (*format == '%')
 			{
-				print_char(*format, &count);
-			} else
+				write_char('%', &count);
+			} else if (*format == 'c')
 			{
-				count += process_format(format, args_lists);
+				char c = va_arg(args_lists, int);
+
+				write_char(c, &count);
+			} else if (*format == 's')
+			{
+				char *str = va_arg(args_lists, char *);
+
+				write_string(str, &count);
 			}
 		}
 		format++;
