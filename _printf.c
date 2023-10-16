@@ -1,77 +1,45 @@
 #include "main.h"
 /**
- *write_char - Function to write a character to standard output
- *@c: character
- *@count: integer
+ * _printf - is a function that selects the correct function to print.
+ * @format: identifier to look for.
+ * Return: the length of the string.
  */
-void write_char(char c, int *count)
+int _printf(const char * const format, ...)
 {
-	write(1, &c, 1);
-	(*count)++;
-}
+	convert_match m[] = {
+		{"%s", printf_string}, {"%c", printf_char},
+		{"%%", printf_37},
+		{"%i", printf_int}, {"%d", printf_dec}, {"%r", printf_srev},
+		{"%R", printf_rot13}, {"%b", printf_bin}, {"%u", printf_unsigned},
+		{"%o", printf_oct}, {"%x", printf_hex}, {"%X", printf_HEX},
+		{"%S", printf_exclusive_string}, {"%p", printf_pointer}
+	};
 
-/**
- *write_string - function to write string
- *@str: string
- *@count: integer
- */
-void write_string(const char *str, int *count)
-{
-	write(1, str, strlen(str));
-	(*count) += strlen(str);
-}
+	va_list args;
+	int i = 0, j, len = 0;
 
-/**
- *_printf - Custom printf function
- * @format: Format string
- *
- * Description:
- * A custom printf function that handles format specifiers
- * %c for characters and %s for strings. It writes the formatted output
- * to the standard output.
- *
- * Return:
- * The number of characters printed, or -1 if format is NULL.
- */
-int _printf(const char *format, ...)
-{
-	int count = 0;
-	va_list args_lists;
-
-	if (format == NULL)
+	va_start(args, format);
+	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
 		return (-1);
 
-	va_start(args_lists, format);
-
-	while (*format)
+Here:
+	while (format[i] != '\0')
 	{
-		if (*format != '%')
+		j = 13;
+		while (j >= 0)
 		{
-			write_char(*format, &count);
-		} else
-		{
-			format++;
-
-			if (*format == '\0')
-				break;
-
-			if (*format == '%')
+			if (m[j].id[0] == format[i] && m[j].id[1] == format[i + 1])
 			{
-				write_char('%', &count);
-			} else if (*format == 'c')
-			{
-				char c = va_arg(args_lists, int);
-
-				write_char(c, &count);
-			} else if (*format == 's')
-			{
-				char *str = va_arg(args_lists, char *);
-
-				write_string(str, &count);
+				len += m[j].f(args);
+				i = i + 2;
+				goto Here;
 			}
+			j--;
 		}
-		format++;
+		_putchar(format[i]);
+		len++;
+		i++;
 	}
-	va_end(args_lists);
-	return (count);
+	va_end(args);
+	return (len);
 }
