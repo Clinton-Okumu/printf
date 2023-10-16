@@ -1,16 +1,17 @@
 #include "main.h"
 
 /**
- * printf_hex_aux - prints an hexgecimal number.
- * @num: arguments.
+ * write_hex - prints an hexgecimal number.
+ * @args_lists: arguments.
  * Return: counter.
  */
-int printf_hex_aux(unsigned long int num)
+int write_hex(va_list args_lists)
 {
-	long int i;
-	long int *array;
-	long int counter = 0;
-	unsigned long int temp = num;
+	int i;
+	int *array;
+	int counter = 0;
+	unsigned int num = va_arg(args_lists, unsigned int);
+	unsigned int temp = num;
 
 	while (num / 16 != 0)
 	{
@@ -18,7 +19,7 @@ int printf_hex_aux(unsigned long int num)
 		counter++;
 	}
 	counter++;
-	array = malloc(counter * sizeof(long int));
+	array = malloc(counter * sizeof(int));
 
 	for (i = 0; i < counter; i++)
 	{
@@ -29,7 +30,7 @@ int printf_hex_aux(unsigned long int num)
 	{
 		if (array[i] > 9)
 			array[i] = array[i] + 39;
-		_putchar(array[i] + '0');
+		put_char(array[i] + '0');
 	}
 	free(array);
 	return (counter);

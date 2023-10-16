@@ -1,12 +1,12 @@
 #include "main.h"
 
 /**
- * printf_srev - function that prints a str in reverse
+ * write_srev - function that prints a str in reverse
  * @args: type struct va_arg where is allocated printf arguments
  *
  * Return: the string
  */
-int printf_srev(va_list args)
+int write_srev(va_list args)
 {
 
 	char *s = va_arg(args, char*);
@@ -18,6 +18,6 @@ int printf_srev(va_list args)
 	while (s[j] != '\0')
 		j++;
 	for (i = j - 1; i >= 0; i--)
-		_putchar(s[i]);
+		put_char(s[i]);
 	return (j);
 }

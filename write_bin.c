@@ -1,16 +1,16 @@
 #include "main.h"
 
 /**
- * printf_bin - prints a binary number.
- * @val: arguments.
+ * write_bin - prints a binary number.
+ * @args_lists: arguments.
  * Return: 1.
  */
-int printf_bin(va_list val)
+int write_bin(va_list args_lists)
 {
 	int flag = 0;
 	int cont = 0;
 	int i, a = 1, b;
-	unsigned int num = va_arg(val, unsigned int);
+	unsigned int num = va_arg(args_lists, unsigned int);
 	unsigned int p;
 
 	for (i = 0; i < 32; i++)
@@ -21,14 +21,14 @@ int printf_bin(va_list val)
 		if (flag)
 		{
 			b = p >> (31 - i);
-			_putchar(b + 48);
+			put_char(b + 48);
 			cont++;
 		}
 	}
 	if (cont == 0)
 	{
 		cont++;
-		_putchar('0');
+		put_char('0');
 	}
 	return (cont);
 }
