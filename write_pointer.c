@@ -11,7 +11,7 @@ int write_pointer(va_list args_lists)
 
 	if (p == NULL)
 	{
-		return write_str("(nil)");
+		return (write_str("(nil)"));
 	}
 
 	int len = write_str("0x");
