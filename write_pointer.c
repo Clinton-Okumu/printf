@@ -7,25 +7,15 @@
  */
 int write_pointer(va_list args_lists)
 {
-	void *p;
-	char *s = "(nil)";
-	long int a;
-	int b;
-	int i;
+	void *p = va_args(args_lists, void*);
 
-	p = va_arg(args_lists, void*);
 	if (p == NULL)
 	{
-		for (i = 0; s[i] != '\0'; i++)
-		{
-			put_char(s[i]);
-		}
-		return (i);
+		return write_str("(nil)");
 	}
 
-	a = (unsigned long int)p;
-	put_char('0');
-	put_char('x');
-	b = write_hex_aux(a);
-	return (b + 2);
+	int len = write_str("0x");
+
+	len += write_hex_aux((unsigned long)p);
+	return (len);
 }
