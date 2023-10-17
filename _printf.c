@@ -23,22 +23,23 @@ int _printf(const char *format, ...)
 	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
 		return (-1);
 
-	for (i = 0; format[i] != '\0'; i++)
+Here:
+	while (format[i] != '\0')
 	{
-		for (j = 13; j >= 0; j--)
+		j = 13;
+		while (j >= 0)
 		{
-		if (m[j].id[0] == format[i] && m[j].id[1] == format[i + 1])
-		{
-			len += m[j].f(args_lists);
-			i = i + 1;
-			break;
+			if (m[j].id[0] == format[i] && m[j].id[1] == format[i + 1])
+			{
+				len += m[j].f(args_lists);
+				i = i + 2;
+				goto Here;
+			}
+			j--;
 		}
-		}
-		if (j < 0)
-		{
-			put_char(format[i]);
-			len++;
-		}
+		put_char(format[i]);
+		len++;
+		i++;
 	}
 	va_end(args_lists);
 	return (len);
